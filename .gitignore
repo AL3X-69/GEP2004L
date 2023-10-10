@@ -2,3 +2,6 @@
 !/**/
 !*.*
 .~lock.*#
+*.exe
+
+/cmake-build-debug/
