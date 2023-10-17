@@ -16,4 +16,6 @@ int main() {
         y = (y * sqrt(x) + 1.0 / sqrt(x)) / (y + 1.0);
     }
     printf("pi = %f\n", lpi);
+
+    return 0;
 }
