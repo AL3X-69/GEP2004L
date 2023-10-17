@@ -6,10 +6,10 @@
 #define TAILLE_MAX 800
 #define COTE 50
 
-size_t getLastSpaceIndex(char s[]) {
-    for (size_t i = strlen(s) + 1; i > 0; i--) {
-        i--;
-        if (s[i] == ' ') return i;
+size_t getLastCharIndex(char s[], char c) {
+    size_t len = strlen(s);
+    for (size_t i = 0; i < len; i++) {
+        if (s[len - i - 1] == c) return len - i - 1;
     }
     return 0;
 }
@@ -28,19 +28,40 @@ void printHallowLine() {
 }
 
 void printTextLine(char s[]) {
-    printf("%s\n\n", s);
-    if (strlen(s) > COTE - 10) return;
-    int pl = (COTE / 2) - strlen(s) / 2;
+    //printf("ptl: %s\n", s);
+    size_t len = strlen(s);
+    if (len > COTE - 10) return;
+    int pl = (COTE / 2) - len / 2;
     int pr = pl;
-    if (strlen(s) % 2 != 0) pr++;
+    //if (len % 2 != 0) pr--;
     for (int i = 0; i < COTE; i++) {
         if (i == 0 || i == COTE - 1) printf("#");
-        else if (i > pl && i < COTE - pr) printf("%c", s[i - pl - 1]);
+        else if (i >= pl && i <= COTE - pr && ((unsigned long) i - pl) < len) {
+            printf("%c", s[i - pl]);
+        }
         else printf(" ");
     }
     printf("\n");
 }
 
+size_t trim(char *src) {
+    size_t len = strlen(src);
+    int tl = 0, tr = 0;
+    size_t i;
+    for (i = 0; i < len; i++) {
+        if (src[i] == ' ') tl++;
+        else break;
+    }
+    for (i = 0; i < len; i++) {
+        if (src[len - i - 1] == ' ') tr++;
+        else break;
+    }
+    strncpy(src, src + tl, len - tr - tl);
+
+    *(src + len - tr - tl) = 0;
+
+    return tl + tr;
+}
 
 int main()
 {
@@ -59,15 +80,34 @@ int main()
     while (c < len) {
         if (len - c > 40) {
             char t[TAILLE_MAX + 1];
-            strncpy(t, txt + c, len - c);
-            printf("\n\n|%s|\n\n", t);
-            size_t spaceIndex = getLastSpaceIndex(t);
-            if (spaceIndex == 0) spaceIndex = 39;
-            char s[spaceIndex + 1];
-            strncpy(s, t, spaceIndex + 1);
-            printf("\n\n|%s|\n\n", s);
+            strncpy(t, txt + c, COTE - 10);
+            t[COTE - 10] = 0;
+            printf("t1 = %s\n", t);
+            //size_t trimOffset = trim(t);
+            //printf("t2 = %s\n", t);
+            size_t offset = getLastCharIndex(t, ' ');
+            //printf("si = %zu\n", offset);
+            size_t cutIndex = offset;
+            unsigned short cuttedWord = 0;
+            if (offset < COTE / 2) {
+                cutIndex = COTE - 11;
+                offset = cutIndex;
+                cuttedWord = 1;
+            } else {
+                cutIndex -= 1;
+                cuttedWord = 0;
+            }
+            char s[TAILLE_MAX + 1];
+            strncpy(s, t, cutIndex);
+            if (cuttedWord) {
+                s[offset + 1] = 0;
+                strcat(s, "-");
+            } else s[offset] = 0;
+            printf("s = %s\n", s);
             printTextLine(s);
-            c += spaceIndex;
+            //printf("si = %zu\n", offset);
+            c += offset;
+            //printf("%zu\n", offset + trimOffset);
         } else {
             char t[TAILLE_MAX + 1];
             strncpy(t, txt + c, len - c);
