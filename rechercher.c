@@ -24,4 +24,5 @@ int main() {
     r = search(fibonacci, TAILLE, n);
     if (r == -1) printf("La valeur %i n'a pas été trouvée dans la suite\n", n);
     else printf("La valeur %i a été trouvée a l'index %i\n", n, r);
+    return 0;
 }
