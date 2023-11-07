@@ -1,7 +1,12 @@
 #include <stdio.h>
+#include "outils.h"
+
+#define LENGTH 10
+
 int main() {
-int l[0] = {};
-int i = l[1];
-printf("%i", i);
-return 0;
+    int64_t t[LENGTH];
+    initialiser(LENGTH, t, MONOTONE_CR);
+    afficherVecteur(LENGTH, t);
+    verifier(LENGTH, t);
+    return 0;
 }
