@@ -2,22 +2,6 @@
 #include <time.h>
 #include "outils.h"
 
-#ifdef __linux__
-#include <sys/time.h>
-long clock() {
-    struct timeval time;
-    gettimeofday(&time, NULL);
-    return time.tv_sec*1000L + time.tv_usec/1000L;
-}
-#else
-#include <sys/timeb.h>
-long clock() {
-    struct timeb time;
-    ftime(&time);
-    return time.time*1000L + time.millitm;
-}
-#endif
-
 void swap(int64_t t[], int a, int b) {
     if (a == b) return;
     int64_t _t = t[a];
